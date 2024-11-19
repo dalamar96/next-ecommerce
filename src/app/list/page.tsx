@@ -7,7 +7,7 @@ import { Suspense } from "react";
 
 const ListPage = async ({ searchParams }: { searchParams: any }) => {
   const wixClient = await wixClientServer();
-
+  
   const cat = await wixClient.collections.getCollectionBySlug(
     searchParams.cat || "all-products"
   );

@@ -28,7 +28,7 @@ const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [emailCode, setEmailCode] = useState("");
+  const [verificationCode, setEmailCode] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
@@ -82,7 +82,7 @@ const LoginPage = () => {
           break;
         case MODE.EMAIL_VERIFICATION:
           response = await wixClient.auth.processVerification({
-            verificationCode: emailCode,
+            verificationCode: verificationCode,
           });
           break;
         default:
@@ -115,10 +115,13 @@ const LoginPage = () => {
           } else {
             setError("Something went wrong!");
           }
+          break;
         case LoginState.EMAIL_VERIFICATION_REQUIRED:
           setMode(MODE.EMAIL_VERIFICATION);
+          break;
         case LoginState.OWNER_APPROVAL_REQUIRED:
           setMessage("Your account is pending approval");
+          break;
         default:
           break;
       }
@@ -162,7 +165,7 @@ const LoginPage = () => {
             <label className="text-sm text-gray-700">Verification Code</label>
             <input
               type="text"
-              name="emailCode"
+              name="verificationCode"
               placeholder="Code"
               className="ring-2 ring-gray-300 rounded-md p-4"
               onChange={(e) => setEmailCode(e.target.value)}

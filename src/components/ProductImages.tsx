@@ -23,6 +23,7 @@ import { useState } from "react";
 // ];
 
 const ProductImages = ({ items }: { items: any }) => {
+  // , sharedState: string
   const [index, setIndex] = useState(0);
 
   return (

@@ -8,10 +8,12 @@ const CustomizeProducts = ({
   productId,
   variants,
   productOptions,
+  // setSharedState
 }: {
   productId: string;
   variants: products.Variant[];
   productOptions: products.ProductOption[];
+  // setSharedState: React.Dispatch<React.SetStateAction<string>>;
 }) => {
   const [selectedOptions, setSelectedOptions] = useState<{
     [key: string]: string;
@@ -29,8 +31,13 @@ const CustomizeProducts = ({
     setSelectedVariant(variant);
   }, [selectedOptions, variants]);
 
-  const handleOptionSelect = (optionType: string, choice: string) => {
+  const handleOptionSelect = (
+    optionType: string,
+     choice: string,      
+    //  image: string|undefined
+    ) => {
     setSelectedOptions((prev) => ({ ...prev, [optionType]: choice }));
+    // {image && setSharedState(image)}
   };
 
   const isVariantInStock = (choices: { [key: string]: string }) => {
@@ -55,7 +62,7 @@ const CustomizeProducts = ({
         <div className="flex flex-col gap-4" key={option.name}>
           <h4 className="font-medium">Choose a {option.name}</h4>
           <ul className="flex items-center gap-3">
-            {option.choices?.map((choice) => {
+            {option.choices?.map((choice) => {              
               const disabled = !isVariantInStock({
                 ...selectedOptions,
                 [option.name!]: choice.description!,
@@ -66,7 +73,12 @@ const CustomizeProducts = ({
 
               const clickHandler = disabled
                 ? undefined
-                : () => handleOptionSelect(option.name!, choice.description!);
+                : () => {
+                  handleOptionSelect(option.name!,
+                     choice.description!, 
+                    //  choice.media?.items ? choice.media?.items[0].thumbnail?.url : ""
+                    );
+                };
 
               return option.name === "Color" ? (
                 <li
@@ -83,7 +95,13 @@ const CustomizeProducts = ({
                   )}
                   {disabled && (
                     <div className="absolute w-10 h-[2px] bg-red-400 rotate-45 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
-                  )}
+                  )}{choice.media?.items ? [0] && (
+                    <img
+                      src={choice.media?.items[0].thumbnail?.url}
+                      alt=""
+                      className="w-full h-full object-cover rounded-full"
+                    />
+                  ) : null}
                 </li>
               ) : (
                 <li
@@ -93,11 +111,11 @@ const CustomizeProducts = ({
                     backgroundColor: selected
                       ? "#f35c7a"
                       : disabled
-                      ? "#FBCFE8"
-                      : "white",
+                        ? "#FBCFE8"
+                        : "white",
                     color: selected || disabled ? "white" : "#f35c7a",
                     boxShadow: disabled ? "none" : "",
-                    
+
                   }}
                   key={choice.description}
                   onClick={clickHandler}
